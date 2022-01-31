@@ -3,6 +3,7 @@ package chap03.spring;
 import java.util.Date;
 
 import chap03.spring.exception.IdPasswordNotMatchingException;
+import chap03.spring.exception.WrongIdPasswordException;
 
 public class Member {
 	private Long id; 
@@ -60,7 +61,7 @@ public class Member {
 
 	public void changePassword(String oldPassword, String newPassword){
 		if (!password.equals(oldPassword)) {
-			throw new IdPasswordNotMatchingException();
+			throw new WrongIdPasswordException();
 		}
 		this.password = newPassword;
 	}	

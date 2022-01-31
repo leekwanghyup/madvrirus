@@ -1,6 +1,7 @@
 package chap03.spring.controller;
 
-import org.apache.tomcat.util.log.UserDataHelper.Mode;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,7 @@ public class LoginController {
 	}
 	
 	@PostMapping
-	public String submit(LoginCommand loginCommand, Errors errors, Model model) {
+	public String submit(LoginCommand loginCommand, Errors errors, HttpSession session) {
 		new LoginCommandValidator().validate(loginCommand, errors);
 		if(errors.hasErrors()) return "login/loginForm";
 		
@@ -40,7 +41,8 @@ public class LoginController {
 		try {
 			AuthInfo authInfo = 
 					authService.authenticate(loginCommand.getEmail(), loginCommand.getPassword());
-			model.addAttribute("authInfo",authInfo);
+			session.setAttribute("authInfo",authInfo);
+			session.setMaxInactiveInterval(600);
 			//TODO : 세션저장 
 			return "login/loginSuccess";
 		} catch(WrongIdPasswordException e) {
